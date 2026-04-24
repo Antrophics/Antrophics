@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Lost in Space</title>
+
+    <style>
+        :root {
+            --bg: #000000;
+            --text: #ffffff;
+            --accent: #6c5ce7;
+            --accent2: #00cec9;
+            --accent3: #fd79a8;
+            --glow-purple: rgba(108, 92, 231, 0.6);
+            --glow-teal: rgba(0, 206, 201, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Inter', Arial, sans-serif;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bg);
+            overflow: hidden;
+            cursor: default;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* ── Starfield Canvas ── */
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── Shooting Stars ── */
+        .shooting-star {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1;
+            width: 2px;
+            height: 2px;
+            background: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 6px 2px rgba(255, 255, 255, 0.8),
+                0 0 20px 4px rgba(180, 220, 255, 0.6),
+                0 0 40px 8px rgba(140, 200, 255, 0.3);
+            animation: shoot linear forwards;
+        }
+        .shooting-star::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 80px;
+            height: 1.5px;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), transparent);
+            border-radius: 1px;
+        }
+        @keyframes shoot {
+            0% {
+                transform: translate(0, 0) rotate(-35deg);
+                opacity: 1;
+            }
+            70% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-600px, 400px) rotate(-35deg);
+                opacity: 0;
+            }
+        }
+
+        /* ── Main Container ── */
+        #main {
+            position: relative;
+            z-index: 10;
+            max-width: 650px;
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+        }
+
+        /* ── 404 Glitch Text ── */
+        .glitch-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .glitch {
+            font-size: clamp(100px, 20vw, 180px);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            color: #ffffff;
+            position: relative;
+            line-height: 1;
+            text-shadow: 0 0 40px var(--glow-purple),
+                0 0 80px var(--glow-purple),
+                0 0 120px rgba(108, 92, 231, 0.35),
+                0 0 200px rgba(108, 92, 231, 0.2);
+            animation: floatGlitch 5s ease-in-out infinite;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: '404';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.7;
+        }
+        .glitch::before {
+            color: var(--accent2);
+            z-index: -1;
+            animation: glitchShift1 2.5s infinite ease-in-out alternate-reverse;
+            text-shadow: 0 0 30px var(--glow-teal), 0 0 60px var(--glow-teal);
+        }
+        .glitch::after {
+            color: var(--accent3);
+            z-index: -2;
+            animation: glitchShift2 3s infinite ease-in-out alternate;
+            text-shadow: 0 0 30px rgba(253, 121, 168, 0.7), 0 0 60px rgba(253, 121, 168, 0.4);
+        }
+        @keyframes glitchShift1 {
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+            20% {
+                transform: translate(-6px, 3px);
+            }
+            40% {
+                transform: translate(6px, -2px);
+            }
+            60% {
+                transform: translate(-3px, -4px);
+            }
+            80% {
+                transform: translate(4px, 2px);
+            }
+        }
+        @keyframes glitchShift2 {
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(5px, -3px);
+            }
+            50% {
+                transform: translate(-5px, 4px);
+            }
+            75% {
+                transform: translate(3px, 1px);
+            }
+        }
+        @keyframes floatGlitch {
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+            25% {
+                transform: translateY(-8px);
+            }
+            50% {
+                transform: translateY(0px);
+            }
+            75% {
+                transform: translateY(8px);
+            }
+        }
+
+        /* ── Orbiting Ring ── */
+        .orbit-ring {
+            position: absolute;
+            border: 1.5px solid rgba(255, 255, 255, 0.12);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: spinRing linear infinite;
+        }
+        .orbit-ring.r1 {
+            width: 280px;
+            height: 280px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotateX(65deg);
+            animation-duration: 14s;
+            border-color: rgba(108, 92, 231, 0.25);
+            box-shadow: 0 0 40px rgba(108, 92, 231, 0.08);
+        }
+        .orbit-ring.r2 {
+            width: 360px;
+            height: 360px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotateX(55deg) rotateY(20deg);
+            animation-duration: 20s;
+            animation-direction: reverse;
+            border-color: rgba(0, 206, 201, 0.2);
+            box-shadow: 0 0 50px rgba(0, 206, 201, 0.06);
+        }
+        .orbit-ring.r3 {
+            width: 440px;
+            height: 440px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotateX(70deg) rotateY(-15deg);
+            animation-duration: 26s;
+            border-color: rgba(253, 121, 168, 0.18);
+            box-shadow: 0 0 45px rgba(253, 121, 168, 0.05);
+        }
+        @keyframes spinRing {
+            from {
+                transform: translate(-50%, -50%) rotateX(65deg) rotateZ(0deg);
+            }
+            to {
+                transform: translate(-50%, -50%) rotateX(65deg) rotateZ(360deg);
+            }
+        }
+        @keyframes spinRing2 {
+            from {
+                transform: translate(-50%, -50%) rotateX(55deg) rotateY(20deg) rotateZ(0deg);
+            }
+            to {
+                transform: translate(-50%, -50%) rotateX(55deg) rotateY(20deg) rotateZ(-360deg);
+            }
+        }
+        @keyframes spinRing3 {
+            from {
+                transform: translate(-50%, -50%) rotateX(70deg) rotateY(-15deg) rotateZ(0deg);
+            }
+            to {
+                transform: translate(-50%, -50%) rotateX(70deg) rotateY(-15deg) rotateZ(360deg);
+            }
+        }
+        .orbit-ring.r2 {
+            animation-name: spinRing2;
+        }
+        .orbit-ring.r3 {
+            animation-name: spinRing3;
+        }
+
+        /* ── Floating Dot on Ring ── */
+        .orbit-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            pointer-events: none;
+            box-shadow: 0 0 16px 4px currentColor;
+            animation: orbitDot linear infinite;
+        }
+        .orbit-dot.d1 {
+            color: var(--accent);
+            top: 50%;
+            left: 50%;
+            animation-duration: 7s;
+            offset-path: circle(140px at center);
+        }
+        .orbit-dot.d2 {
+            color: var(--accent2);
+            top: 50%;
+            left: 50%;
+            animation-duration: 10s;
+            animation-direction: reverse;
+            offset-path: circle(180px at center);
+        }
+        .orbit-dot.d3 {
+            color: var(--accent3);
+            top: 50%;
+            left: 50%;
+            animation-duration: 13s;
+            offset-path: circle(220px at center);
+        }
+        @keyframes orbitDot {
+            100% {
+                offset-distance: 100%;
+            }
+        }
+
+        /* ── Heading ── */
+        h1 {
+            font-size: clamp(22px, 4vw, 32px);
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.02em;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        /* ── Paragraph ── */
+        p {
+            font-size: clamp(15px, 2.5vw, 18px);
+            color: #b0b0b0;
+            line-height: 1.6;
+            max-width: 420px;
+            animation: fadeInUp 0.8s ease-out 0.5s both;
+        }
+        p .highlight {
+            color: var(--accent2);
+            font-weight: 600;
+            text-shadow: 0 0 20px rgba(0, 206, 201, 0.5);
+        }
+
+        /* ── Button ── */
+        .btn-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 32px;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out 0.7s both;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
+        .btn-home::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3));
+            opacity: 0;
+            transition: opacity 0.35s;
+            z-index: -1;
+        }
+        .btn-home:hover {
+            border-color: transparent;
+            box-shadow: 0 0 40px rgba(108, 92, 231, 0.5),
+                0 0 80px rgba(0, 206, 201, 0.3),
+                0 8px 30px rgba(0, 0, 0, 0.4);
+            transform: translateY(-3px);
+            color: #fff;
+        }
+        .btn-home:hover::before {
+            opacity: 1;
+        }
+        .btn-home:active {
+            transform: translateY(0px) scale(0.97);
+            transition: transform 0.1s;
+        }
+        .btn-home .arrow {
+            display: inline-block;
+            transition: transform 0.3s;
+            font-size: 18px;
+        }
+        .btn-home:hover .arrow {
+            transform: translateX(4px);
+        }
+
+        /* ── Subtle Vignette ── */
+        .vignette {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 5;
+            background: radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.75) 100%);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 480px) {
+            #main {
+                padding: 20px 16px;
+                gap: 14px;
+            }
+            .orbit-ring.r1 {
+                width: 200px;
+                height: 200px;
+            }
+            .orbit-ring.r2 {
+                width: 260px;
+                height: 260px;
+            }
+            .orbit-ring.r3 {
+                width: 320px;
+                height: 320px;
+            }
+            .btn-home {
+                padding: 12px 26px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Starfield canvas -->
+    <canvas id="starfield"></canvas>
+
+    <!-- Vignette overlay -->
+    <div class="vignette"></div>
+
+    <!-- Orbiting rings (positioned relative to main) -->
+    <div class="orbit-ring r1"></div>
+    <div class="orbit-ring r2"></div>
+    <div class="orbit-ring r3"></div>
+
+    <!-- Main content -->
+    <div id="main">
+        <div class="glitch-wrapper">
+            <span class="glitch">404</span>
+        </div>
+        <h1>Lost in the Void</h1>
+        <p>
+            The page you're looking for has drifted into
+            <span class="highlight">deep space</span>.
+            It might have been moved, deleted, or swallowed by a black hole.
+        </p>
+        <a href="/" class="btn-home">
+            Return Home
+            <span class="arrow">→</span>
+        </a>
+    </div>
+
+    <script>
+        // ─────────────────────────────────────
+        //  STARFIELD CANVAS
+        // ─────────────────────────────────────
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        let width, height;
+
+        function resizeCanvas() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+            initStars();
+        }
+
+        function initStars() {
+            const count = Math.floor((width * height) / 1800);
+            stars = [];
+            for (let i = 0; i < count; i++) {
+                stars.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    r: Math.random() * 1.8 + 0.3,
+                    twinkleSpeed: Math.random() * 0.02 + 0.005,
+                    twinkleOffset: Math.random() * Math.PI * 2,
+                    baseAlpha: Math.random() * 0.7 + 0.3,
+                    hue: Math.random() < 0.15 ?
+                        ['#b8c0ff', '#a0f0ed', '#ffb3c6'][Math.floor(Math.random() * 3)] :
+                        '#ffffff',
+                });
+            }
+        }
+
+        function drawStars(timestamp) {
+            ctx.clearRect(0, 0, width, height);
+            for (const s of stars) {
+                const alpha = s.baseAlpha + Math.sin(timestamp * s.twinkleSpeed + s.twinkleOffset) * 0.35;
+                const clampedAlpha = Math.max(0.15, Math.min(1, alpha));
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                ctx.fillStyle = s.hue;
+                ctx.globalAlpha = clampedAlpha;
+                ctx.fill();
+                // occasional glow on some stars
+                if (s.r > 1.3 && clampedAlpha > 0.75) {
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.r * 3, 0, Math.PI * 2);
+                    ctx.fillStyle = s.hue;
+                    ctx.globalAlpha = clampedAlpha * 0.12;
+                    ctx.fill();
+                }
+            }
+            ctx.globalAlpha = 1;
+        }
+
+        function animateStars(timestamp) {
+            drawStars(timestamp);
+            requestAnimationFrame(animateStars);
+        }
+
+        // ─────────────────────────────────────
+        //  SHOOTING STARS (periodic spawn)
+        // ─────────────────────────────────────
+        function spawnShootingStar() {
+            const star = document.createElement('div');
+            star.className = 'shooting-star';
+            const startX = Math.random() * width * 0.8 + width * 0.1;
+            const startY = Math.random() * height * 0.4;
+            star.style.left = startX + 'px';
+            star.style.top = startY + 'px';
+            const duration = Math.random() * 1.5 + 1.2;
+            star.style.animationDuration = duration + 's';
+            document.body.appendChild(star);
+
+            star.addEventListener('animationend', () => {
+                star.remove();
+            });
+        }
+
+        function scheduleShootingStar() {
+            const delay = Math.random() * 7000 + 4000;
+            setTimeout(() => {
+                spawnShootingStar();
+                scheduleShootingStar();
+            }, delay);
+        }
+
+        // ─────────────────────────────────────
+        //  PARALLAX ON MOUSE MOVE
+        // ─────────────────────────────────────
+        const mainEl = document.getElementById('main');
+        const rings = document.querySelectorAll('.orbit-ring');
+
+        document.addEventListener('mousemove', (e) => {
+            const cx = window.innerWidth / 2;
+            const cy = window.innerHeight / 2;
+            const dx = (e.clientX - cx) / cx;
+            const dy = (e.clientY - cy) / cy;
+
+            // Slight parallax on main content
+            mainEl.style.transform = `translate(${dx * -12}px, ${dy * -12}px)`;
+
+            // Shift rings
+            rings.forEach((ring, i) => {
+                const factor = (i + 1) * 8;
+                ring.style.transform = ring.style.transform.replace(
+                    /translate\([^)]+\)/,
+                    `translate(${dx * -factor + 50}%, ${dy * -factor + 50}%)`
+                );
+            });
+        });
+
+        // ─────────────────────────────────────
+        //  INIT
+        // ─────────────────────────────────────
+        resizeCanvas();
+        requestAnimationFrame(animateStars);
+        scheduleShootingStar();
+        // Spawn one immediately for instant delight
+        setTimeout(spawnShootingStar, 600);
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+        });
+
+        // ─────────────────────────────────────
+        //  EASTER EGG: Konami-like key sequence
+        //  Type "404" to trigger a burst of stars
+        // ─────────────────────────────────────
+        let keyBuffer = '';
+        document.addEventListener('keydown', (e) => {
+            keyBuffer += e.key;
+            if (keyBuffer.length > 3) keyBuffer = keyBuffer.slice(-3);
+            if (keyBuffer === '404') {
+                keyBuffer = '';
+                // Burst of shooting stars
+                for (let i = 0; i < 8; i++) {
+                    setTimeout(() => spawnShootingStar(), i * 150);
+                }
+                // Brief flash
+                const flash = document.createElement('div');
+                flash.style.cssText = `
+                            position:fixed;inset:0;pointer-events:none;z-index:100;
+                            background:radial-gradient(circle,rgba(255,255,255,0.25),transparent 70%);
+                            animation:fadeFlash 0.8s ease-out forwards;
+                        `;
+                document.body.appendChild(flash);
+                flash.addEventListener('animationend', () => flash.remove());
+            }
+        });
+
+        // Add flash animation dynamically
+        const flashStyle = document.createElement('style');
+        flashStyle.textContent = `
+                    @keyframes fadeFlash {
+                        from { opacity:1; }
+                        to { opacity:0; }
+                    }
+                `;
+        document.head.appendChild(flashStyle);
+    </script>
+</body>
+</html>
